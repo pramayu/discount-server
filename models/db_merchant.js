@@ -30,6 +30,12 @@ var MerchantSchema = new mongoose.Schema({
     publicId: { type: String },
     secureUrl: { type: String },
     imgType: { type: String }
+  }],
+  rules: [{
+    child: { type: String }
+  }],
+  facilities: [{
+    child: { type: String }
   }]
 });
 
