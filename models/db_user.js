@@ -13,6 +13,9 @@ var UserSchema = new mongoose.Schema({
   fullname: {
     type: String
   },
+  address: {
+    type: String
+  },
   strhash: {
     type: String, required: true
   },

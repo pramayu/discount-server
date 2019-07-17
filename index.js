@@ -6,11 +6,13 @@ var bodyParser = require('body-parser');
 var { ApolloServer, makeExecutableSchema } = require('apollo-server-express');
 var { fileLoader, mergeTypes, mergeResolvers } = require('merge-graphql-schemas');
 var mongoose = require('mongoose');
+var jwt = require('jsonwebtoken');
 var logger = require('morgan');
 require('dotenv').config();
 var typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schema')));
 var resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')));
 var schema = makeExecutableSchema({ typeDefs, resolvers });
+var certpub = fs.readFileSync(path.join(__dirname, './utils/jwtRS256.key.pub'));
 
 var app = express();
 
@@ -25,7 +27,7 @@ var currentuser = (req, res, next) => {
   if(authorization) {
     var token = authorization.split(' ')[1];
     if(token.length > 0) {
-      var user = jwt.verify(token, cert);
+      var user = jwt.verify(token, certpub);
       req.current_user = user;
     }
   }
