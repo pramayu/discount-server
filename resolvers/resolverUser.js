@@ -3,9 +3,16 @@ var path = require('path');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 var _ = require('lodash');
+var cloudinary = require('cloudinary');
 var db_User = require('../models/db_user');
 var cert = fs.readFileSync(path.join(__dirname, '../utils/jwtRS256.key'));
 var certpub = fs.readFileSync(path.join(__dirname, '../utils/jwtRS256.key.pub'));
+
+cloudinary.config({
+  cloud_name: 'dw8yfsem4',
+  api_key: '177692719348648',
+  api_secret: '-3ZXwK1ZC9I6_8Tzo6lEZfXgk-o'
+});
 
 module.exports = {
   Query:{
@@ -181,6 +188,7 @@ module.exports = {
       }
     },
     updateuser: async(parent, args, { current_user }) => {
+      console.log(JSON.stringify(args))
       if(_.isEmpty(args)) {
         return {
           status: false,
@@ -199,6 +207,17 @@ module.exports = {
               user.email = user.email !== args.email ? args.email : user.email;
               user.address = user.address !== args.address ? args.address : user.address;
               user.phone = user.phone !== args.phone ? args.phone : user.phone;
+              if(args.pprofile.length > 0) {
+                if(user.photos.length > 0) {
+                  cloudinary.uploader.destroy(user.photos[0].publicId);
+                  await db_User.updateOne({'_id': args.userID}, {$pull: { photos: { '_id': user.photos[0]._id } }});
+                }
+                user.photos.push({
+                  publicId: args.pprofile[0].publicId,
+                  secureUrl: args.pprofile[0].secureUrl,
+                  imgType: args.pprofile[0].imgType,
+                });
+              }
               var saveuser = await user.save();
               if(saveuser) {
                 var token = jwt.sign({
@@ -218,6 +237,17 @@ module.exports = {
               user.email = user.email !== args.email ? args.email : user.email;
               user.address = user.address !== args.address ? args.address : user.address;
               user.phone = user.phone !== args.phone ? args.phone : user.phone;
+              if(args.pprofile.length > 0) {
+                if(user.photos.length > 0) {
+                  cloudinary.uploader.destroy(user.photos[0].publicId);
+                  await db_User.updateOne({'_id': args.userID}, {$pull: { photos: { '_id': user.photos[0]._id } }});
+                }
+                user.photos.push({
+                  publicId: args.pprofile[0].publicId,
+                  secureUrl: args.pprofile[0].secureUrl,
+                  imgType: args.pprofile[0].imgType,
+                });
+              }
               var saveuser = await user.save();
               if(saveuser) {
                 return {

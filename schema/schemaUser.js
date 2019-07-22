@@ -7,12 +7,20 @@ module.exports =`
     address: String
     fullname: String
     privilege: String
+    photos: [Image]
   }
 
   type userquery {
     status: Boolean!
     user: User
     error: [Error!]
+  }
+
+  type Image {
+    _id: ID!
+    publicId: String
+    secureUrl: String
+    imgType: String
   }
 
   type Query {
@@ -26,11 +34,17 @@ module.exports =`
     usertype: String
   }
 
+  input pprofile {
+    publicId: String
+    imgType: String
+    secureUrl: String
+  }
+
   type Mutation {
     createuser(username: String!, email: String!, phone: String!, password: String): usermutation!
     loginuser(identifier: String!, password: String!): usermutation!
     comparepin(uniquepin: String!): usermutation!
     authorization(usertoken: String): usermutation!
-    updateuser(userID: ID!, username: String, email: String, phone: String, fullname: String, address: String): usermutation!
+    updateuser(userID: ID!, username: String, email: String, phone: String, fullname: String, address: String, pprofile: [pprofile]): usermutation!
   }
 `

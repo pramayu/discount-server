@@ -461,6 +461,14 @@ chownr@^1.1.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.2.tgz#a18f1e0b269c8a6a5d3c86eb298beb14c3dd7bf6"
   integrity sha512-GkfeAQh+QNy3wquu9oIZr6SS5x7wGdSgNQvD10X3r+AZr1Oys22HW8kAmDMvNg2+Dm0TeGaEuO8gFwdBXxwO8A==
 
+cloudinary@^1.14.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/cloudinary/-/cloudinary-1.14.0.tgz#40f66d6b34169849ae98ca9e56bc99b2b26dd48f"
+  integrity sha512-auJY4aD1UGnQTD2iy6kuTA+FJsqyrr9svG12WYSPAO6oRGRf+16UFDDBNuRMm37wj8Tyn8LyiED0b+Jha36ORA==
+  dependencies:
+    lodash "^4.17.11"
+    q "^1.5.1"
+
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
@@ -1416,6 +1424,11 @@ proxy-addr@~2.0.5:
   dependencies:
     forwarded "~0.1.2"
     ipaddr.js "1.9.0"
+
+q@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
+  integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
 qs@6.7.0:
   version "6.7.0"
