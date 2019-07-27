@@ -46,5 +46,7 @@ module.exports =`
     comparepin(uniquepin: String!): usermutation!
     authorization(usertoken: String): usermutation!
     updateuser(userID: ID!, username: String, email: String, phone: String, fullname: String, address: String, pprofile: [pprofile]): usermutation!
+    changepassword(oldpassword: String!, newpassword: String!, confirmpassword: String!, userID: ID!):usermutation!
+    changeusertype(userID: ID!, usertype: String!): usermutation!
   }
 `

@@ -188,7 +188,6 @@ module.exports = {
       }
     },
     updateuser: async(parent, args, { current_user }) => {
-      console.log(JSON.stringify(args))
       if(_.isEmpty(args)) {
         return {
           status: false,
@@ -274,6 +273,96 @@ module.exports = {
               message: 'please re-login'
             }]
           }
+        }
+      }
+    },
+    changepassword: async(parent, args, { current_user }) => {
+      if(_.isEmpty(args)) {
+        return {
+          status: false,
+          error: [{
+            path: 'change_password',
+            message: 'field cant be empty'
+          }]
+        }
+      } else {
+        var user = await db_User.findOne({'_id': args.userID});
+        var match = await bcrypt.compare(args.oldpassword, user.strhash);
+        if(match) {
+          if(args.newpassword === args.confirmpassword && args.newpassword !== args.oldpassword) {
+            var hashStr = await bcrypt.hash(args.newpassword, 12);
+            user.strhash = hashStr;
+            var saveuser = await user.save();
+            if(saveuser) {
+              return {
+                status: true,
+                error: []
+              }
+            }
+          } else {
+            return {
+              status: false,
+              error: [{
+                path: 'change_password',
+                message: 'Re-type password'
+              }]
+            }
+          }
+        } else {
+          return {
+            status: false,
+            error: [{
+              path: 'change_password',
+              message: 'Wrong password'
+            }]
+          }
+        }
+      }
+    },
+    changeusertype: async(parent, args, { current_user }) => {
+      if(!_.isEmpty(args)) {
+        if(current_user || args.userID === current_user._id) {
+          var user = await db_User.findOne({'_id': args.userID});
+          if(user !== null) {
+            user.privilege = 'merchant';
+            var saveuser = await user.save();
+            if(saveuser) {
+              var token = jwt.sign({
+                _id: saveuser._id,
+                username: saveuser.username,
+                usertype: saveuser.privilege
+              }, cert, { algorithm: 'RS256' });
+              return {
+                status: true,
+                token: token,
+                error: []
+              }
+            }
+          } else {
+            return {
+              status: false,
+              error: [{
+                path: 'changeusertype',
+                message: 'user not found'
+              }]
+            }
+          }
+        } else {
+          return {
+            status: false,
+            error: [{
+              path: 'changeusertype',
+              message: 'please re-login'
+            }]
+          }
+        }
+      } else {
+        return {
+          status: false,
+          error: [{
+            path: 'changeusertype',
+            message: 'field are required'
+          }]
         }
       }
     }
