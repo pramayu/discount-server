@@ -32,7 +32,10 @@ var UserSchema = new mongoose.Schema({
     publicId: { type: String },
     secureUrl: { type: String },
     imgType: { type: String }
-  }]
+  }],
+  merchant: {
+    type: mongoose.Schema.Types.ObjectId, ref: 'merchants'
+  }
 });
 
 

@@ -1,26 +1,27 @@
 module.exports =`
   type User {
-    _id: ID!
-    username: String
-    email: String
-    phone: String
-    address: String
-    fullname: String
-    privilege: String
-    photos: [Image]
+    _id         : ID!
+    username    : String
+    email       : String
+    phone       : String
+    address     : String
+    fullname    : String
+    privilege   : String
+    photos      : [Image]
+    merchant    : Merchant
   }
 
   type userquery {
-    status: Boolean!
-    user: User
-    error: [Error!]
+    status      : Boolean!
+    user        : User
+    error       : [Error!]
   }
 
   type Image {
-    _id: ID!
-    publicId: String
-    secureUrl: String
-    imgType: String
+    _id         : ID!
+    publicId    : String
+    secureUrl   : String
+    imgType     : String
   }
 
   type Query {
@@ -28,16 +29,16 @@ module.exports =`
   }
 
   type usermutation {
-    status: Boolean!
-    error: [Error!]
-    token: String
-    usertype: String
+    status      : Boolean!
+    error       : [Error!]
+    token       : String
+    usertype    : String
   }
 
   input pprofile {
-    publicId: String
-    imgType: String
-    secureUrl: String
+    publicId    : String
+    imgType     : String
+    secureUrl   : String
   }
 
   type Mutation {

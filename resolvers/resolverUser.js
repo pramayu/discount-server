@@ -5,6 +5,7 @@ var jwt = require('jsonwebtoken');
 var _ = require('lodash');
 var cloudinary = require('cloudinary');
 var db_User = require('../models/db_user');
+var db_Merchant = require('../models/db_merchant');
 var cert = fs.readFileSync(path.join(__dirname, '../utils/jwtRS256.key'));
 var certpub = fs.readFileSync(path.join(__dirname, '../utils/jwtRS256.key.pub'));
 
@@ -43,6 +44,12 @@ module.exports = {
           }
         }
       }
+    }
+  },
+  User: {
+    merchant: async(parent, args, context) => {
+      var merchant = await db_Merchant.findOne({'_id': parent.merchant});
+      return merchant;
     }
   },
   Mutation: {
@@ -324,7 +331,11 @@ module.exports = {
         if(current_user || args.userID === current_user._id) {
           var user = await db_User.findOne({'_id': args.userID});
           if(user !== null) {
+            var merchant = new db_Merchant();
+            merchant.name = user.username;
+            var savemerchant = await merchant.save();
             user.privilege = 'merchant';
+            user.merchant = savemerchant._id;
             var saveuser = await user.save();
             if(saveuser) {
               var token = jwt.sign({

@@ -4,7 +4,13 @@ var MerchantSchema = new mongoose.Schema({
   name: {
     type: String, required: true, unique: true
   },
-  coordinate: [{ type: String }],
+  phone: {
+    type: String
+  },
+  coordinate: [{
+    latitude: { type: String },
+    longitude: { type: String }
+  }],
   address: {
     type: String
   },
