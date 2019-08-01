@@ -10,6 +10,7 @@ module.exports =`
     foodtype    : String
     sosmed      : String
     phone       : String
+    photos      : [Photo]
   }
 
   type Coordinate {
@@ -18,6 +19,7 @@ module.exports =`
   }
 
   type Photo {
+    _id         : ID
     publicId    : String
     secureUrl   : String
     imgType     : String
@@ -37,8 +39,14 @@ module.exports =`
     description : String
   }
 
+  input imageupload {
+    publicId    : String
+    secureUrl   : String
+    imgType     : String
+  }
+
   type Mutation {
-    basicupdatemerchant(basicupdateprop: basicupdateprop): merchantRespon!
+    basicupdatemerchant(basicupdateprop: basicupdateprop, imageupload: [imageupload]): merchantRespon!
   }
 
 `

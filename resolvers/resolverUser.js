@@ -331,11 +331,15 @@ module.exports = {
         if(current_user || args.userID === current_user._id) {
           var user = await db_User.findOne({'_id': args.userID});
           if(user !== null) {
-            var merchant = new db_Merchant();
-            merchant.name = user.username;
-            var savemerchant = await merchant.save();
-            user.privilege = 'merchant';
-            user.merchant = savemerchant._id;
+            if(user.merchant) {
+              user.privilege = 'merchant';
+            } else {
+              var merchant = new db_Merchant();
+              merchant.name = user.username;
+              var savemerchant = await merchant.save();
+              user.privilege = 'merchant';
+              user.merchant = savemerchant._id;
+            }
             var saveuser = await user.save();
             if(saveuser) {
               var token = jwt.sign({
