@@ -15,7 +15,7 @@ var MerchantSchema = new mongoose.Schema({
     address: {
       type: String
     },
-    districs: {
+    distric: {
       type: String
     },
     province: {

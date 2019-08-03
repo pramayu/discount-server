@@ -2,20 +2,26 @@ module.exports =`
   type Merchant {
     _id         : ID!
     name        : String
-    coordinate  : Coordinate
-    address     : String
-    districs    : String
-    province    : String
     description : String
     foodtype    : String
     sosmed      : String
     phone       : String
     photos      : [Photo]
+    location    : [Location]
   }
 
   type Coordinate {
+    _id         : ID
     latitude    : String
     longitude   : String
+  }
+
+  type Location {
+    _id         : ID
+    address     : String
+    province    : String
+    distric     : String
+    coordinate  : [Coordinate]
   }
 
   type Photo {
@@ -45,8 +51,19 @@ module.exports =`
     imgType     : String
   }
 
+  input addressupdateprop {
+    merchantID  : ID!
+    userID      : ID!
+    address     : String
+    distric     : String
+    province    : String
+    latitude    : String
+    longitude   : String
+  }
+
   type Mutation {
     basicupdatemerchant(basicupdateprop: basicupdateprop, imageupload: [imageupload]): merchantRespon!
+    addressupdatemerchant(addressupdateprop: addressupdateprop): merchantRespon!
   }
 
 `

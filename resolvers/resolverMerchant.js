@@ -54,6 +54,47 @@ module.exports = {
           }]
         }
       }
+    },
+    addressupdatemerchant: async(parent, args, { current_user }) => {
+      if(current_user || current_user._id === args.addressupdateprop.userID) {
+        var merchant = await db_Merchant.findOne({'_id': args.addressupdateprop.merchantID});
+        if(merchant !== null) {
+          var coordinate = [];
+          coordinate.push({
+            latitude: args.addressupdateprop.latitude,
+            longitude: args.addressupdateprop.longitude
+          });
+          merchant.location.push({
+            address: args.addressupdateprop.address,
+            distric: args.addressupdateprop.distric,
+            province: args.addressupdateprop.province,
+            coordinate: coordinate
+          });
+          var savemerchant = await merchant.save();
+          if(savemerchant) {
+            return {
+              status: true,
+              error: []
+            }
+          }
+        } else {
+          return {
+            status: false,
+            error: [{
+              path: 'addressupdatemerchant',
+              message: 'merchant not found'
+            }]
+          }
+        }
+      } else {
+        return {
+          status: false,
+          error: [{
+            path: 'addressupdatemerchant',
+            message: 'plase re-login'
+          }]
+        }
+      }
     }
   }
 }
