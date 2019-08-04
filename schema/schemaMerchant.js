@@ -34,6 +34,7 @@ module.exports =`
   type merchantRespon {
     status      : Boolean!
     error       : [Error!]
+    location    : [Location]
   }
 
   input basicupdateprop {
@@ -54,6 +55,8 @@ module.exports =`
   input addressupdateprop {
     merchantID  : ID!
     userID      : ID!
+    locationID  : ID
+    indexID     : String
     address     : String
     distric     : String
     province    : String
