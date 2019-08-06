@@ -128,6 +128,37 @@ module.exports = {
           }]
         }
       }
+    },
+    addressdelete: async(parent, args, { current_user }) => {
+      if(_.isEmpty(args)) {
+        return {
+          status: false,
+          error: [{
+            path: 'deleteaddress',
+            message: 'fields are require'
+          }]
+        }
+      } else {
+        if(current_user || current_user._id === args.addressdeleteprop.userID) {
+          var deleteaddress = await db_Merchant.updateOne({'_id': args.addressdeleteprop.merchantID}, {
+            $pull: { 'location': {'_id': args.addressdeleteprop.locationID} }
+          });
+          if(deleteaddress.ok === 1) {
+            return {
+              status: true,
+              error: []
+            }
+          }
+        } else {
+          return {
+            status: false,
+            error: [{
+              path: 'deleteaddress',
+              message: 'please re-login'
+            }]
+          }
+        }
+      }
     }
   }
 }

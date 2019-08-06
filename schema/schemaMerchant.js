@@ -8,6 +8,7 @@ module.exports =`
     phone       : String
     photos      : [Photo]
     location    : [Location]
+    niche       : [Niche]
   }
 
   type Coordinate {
@@ -64,9 +65,16 @@ module.exports =`
     longitude   : String
   }
 
+  input addressdeleteprop {
+    userID      : ID!
+    merchantID  : ID!
+    locationID  : ID!
+  }
+
   type Mutation {
     basicupdatemerchant(basicupdateprop: basicupdateprop, imageupload: [imageupload]): merchantRespon!
     addressupdatemerchant(addressupdateprop: addressupdateprop): merchantRespon!
+    addressdelete(addressdeleteprop: addressdeleteprop): merchantRespon!
   }
 
 `
