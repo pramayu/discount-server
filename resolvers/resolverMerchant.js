@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var cloudinary = require('cloudinary');
 var db_Merchant = require('../models/db_merchant');
+var db_Niche = require('../models/db_niche');
 
 cloudinary.config({
   cloud_name: 'dw8yfsem4',
@@ -9,6 +10,14 @@ cloudinary.config({
 });
 
 module.exports = {
+  Merchant: {
+    niche: async(parent, args, {current_user}) => {
+      if(current_user || current_user._id) {
+        var niche = await db_Niche.findOne({'_id': parent.niche});
+        return niche
+      }
+    }
+  },
   Mutation: {
     basicupdatemerchant: async(parent, args, { current_user }) => {
       if(current_user || current_user._id === args.basicupdateprop.userID) {
@@ -154,6 +163,90 @@ module.exports = {
             status: false,
             error: [{
               path: 'deleteaddress',
+              message: 'please re-login'
+            }]
+          }
+        }
+      }
+    },
+    choosecategori: async(parent, args, { current_user }) => {
+      if(_.isEmpty(args)) {
+        return {
+          status: false,
+          error: [{
+            path: 'choosecategori',
+            message: 'fields required'
+          }]
+        }
+      } else {
+        if(current_user || current_user._id === args.categoriprop.userID) {
+          var merchant = await db_Merchant.findOne({'_id': args.categoriprop.merchantID});
+          if(merchant !== null) {
+            merchant.niche = args.categoriprop.nicheID;
+            var savemerchant = await merchant.save();
+            if(savemerchant) {
+              return {
+                status: true,
+                error: []
+              }
+            }
+          } else {
+            return {
+              status: false,
+              error: [{
+                path: 'choosecategori',
+                message: 'merchant not found'
+              }]
+            }
+          }
+        } else {
+          return {
+            status: false,
+            error: [{
+              path: 'choosecategori',
+              message: 'please re-login'
+            }]
+          }
+        }
+      }
+    },
+    addrules: async(parent, args, { current_user }) => {
+      if(_.isEmpty(args)) {
+        return {
+          status: false,
+          error: [{
+            path: 'addrules',
+            message: 'fields are required'
+          }]
+        }
+      } else {
+        if(current_user || current_user._id) {
+          var merchant = await db_Merchant.findOne({'_id': args.merchantID});
+          if(merchant !== null) {
+            args.ruleprop.forEach((rule) => {
+              merchant.rules.push({ child: rule.child });
+            });
+            var savemerchant = await merchant.save();
+            if(savemerchant) {
+              return {
+                status: true,
+                error: []
+              }
+            }
+          } else {
+            return {
+              status: false,
+              error: [{
+                path: 'addrules',
+                message: 'merchant not found'
+              }]
+            }
+          }
+        } else {
+          return {
+            status: false,
+            error: [{
+              path: 'addrules',
               message: 'please re-login'
             }]
           }
