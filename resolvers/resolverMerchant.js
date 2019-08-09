@@ -230,7 +230,8 @@ module.exports = {
             if(savemerchant) {
               return {
                 status: true,
-                error: []
+                error: [],
+                rules: savemerchant.rules
               }
             }
           } else {
@@ -247,6 +248,38 @@ module.exports = {
             status: false,
             error: [{
               path: 'addrules',
+              message: 'please re-login'
+            }]
+          }
+        }
+      }
+    },
+    ruledelete: async(parent, args, {current_user}) => {
+      console.log(args)
+      if(_.isEmpty(args)) {
+        return {
+          status: false,
+          error: [{
+            path: 'ruledelete',
+            message: 'fields are required'
+          }]
+        }
+      } else {
+        if(current_user || current_user._id === args.ruledeleteprop.userID) {
+          var rule = await db_Merchant.updateOne({'_id': args.ruledeleteprop.merchantID}, {
+            $pull: {'rules': {'_id': args.ruledeleteprop.ruleID}}
+          });
+          if(rule.ok === 1) {
+            return {
+              status: true,
+              error: []
+            }
+          }
+        } else {
+          return {
+            status: false,
+            error: [{
+              path: 'ruledelete',
               message: 'please re-login'
             }]
           }

@@ -9,6 +9,7 @@ module.exports =`
     photos      : [Photo]
     location    : [Location]
     niche       : Niche
+    rules       : [Rules]
   }
 
   type Coordinate {
@@ -32,10 +33,16 @@ module.exports =`
     imgType     : String
   }
 
+  type Rules {
+    _id         : ID!
+    child       : String
+  }
+
   type merchantRespon {
     status      : Boolean!
     error       : [Error!]
     location    : [Location]
+    rules       : [Rules]
   }
 
   input basicupdateprop {
@@ -81,12 +88,19 @@ module.exports =`
     child      : String
   }
 
+  input ruledeleteprop {
+    userID      : ID!
+    merchantID  : ID!
+    ruleID      : ID!
+  }
+
   type Mutation {
     basicupdatemerchant(basicupdateprop: basicupdateprop, imageupload: [imageupload]): merchantRespon!
     addressupdatemerchant(addressupdateprop: addressupdateprop): merchantRespon!
     addressdelete(addressdeleteprop: addressdeleteprop): merchantRespon!
     choosecategori(categoriprop: categoriprop): merchantRespon!
     addrules(userID: ID!, merchantID: ID!, ruleprop: [ruleprop]): merchantRespon!
+    ruledelete(ruledeleteprop: ruledeleteprop): merchantRespon!
   }
 
 `
