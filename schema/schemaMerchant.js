@@ -10,6 +10,7 @@ module.exports =`
     location    : [Location]
     niche       : Niche
     rules       : [Rules]
+    facilities  : [Facilities]
   }
 
   type Coordinate {
@@ -38,11 +39,17 @@ module.exports =`
     child       : String
   }
 
+  type Facilities {
+    _id         : ID!
+    child       : String
+  }
+
   type merchantRespon {
     status      : Boolean!
     error       : [Error!]
     location    : [Location]
     rules       : [Rules]
+    facilities  : [Facilities]
   }
 
   input basicupdateprop {
@@ -94,6 +101,16 @@ module.exports =`
     ruleID      : ID!
   }
 
+  input facilitiprop {
+    child       : String
+  }
+
+  input facilitideleteprop {
+    userID      : ID!
+    merchantID  : ID!
+    facilitiID  : ID!
+  }
+
   type Mutation {
     basicupdatemerchant(basicupdateprop: basicupdateprop, imageupload: [imageupload]): merchantRespon!
     addressupdatemerchant(addressupdateprop: addressupdateprop): merchantRespon!
@@ -101,6 +118,8 @@ module.exports =`
     choosecategori(categoriprop: categoriprop): merchantRespon!
     addrules(userID: ID!, merchantID: ID!, ruleprop: [ruleprop]): merchantRespon!
     ruledelete(ruledeleteprop: ruledeleteprop): merchantRespon!
+    addfaciliti(userID: ID!, merchantID: ID!, facilitiprop: [facilitiprop]): merchantRespon!
+    deletefaciliti(facilitideleteprop: facilitideleteprop): merchantRespon!
   }
 
 `

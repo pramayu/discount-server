@@ -285,6 +285,83 @@ module.exports = {
           }
         }
       }
+    },
+    addfaciliti: async(parent, args, {current_user}) => {
+      if(_.isEmpty(args)) {
+        return {
+          status: false,
+          error: [{
+            path: 'addfaciliti',
+            message: 'fields are required'
+          }]
+        }
+      } else {
+        if(current_user || current_user._id === args.userID) {
+          var merchant = await db_Merchant.findOne({'_id': args.merchantID});
+          if(merchant !== null) {
+            args.facilitiprop.forEach((faciliti) => {
+              merchant.facilities.push({
+                child: faciliti.child
+              })
+            });
+            var savedfaciliti = await merchant.save();
+            if(savedfaciliti) {
+              return {
+                status: true,
+                error: [],
+                facilities: savedfaciliti.facilities
+              }
+            }
+          } else {
+            return {
+              status: false,
+              error: [{
+                path: 'addfaciliti',
+                message: 'merchant not found'
+              }]
+            }
+          }
+        } else {
+          return {
+            status: false,
+            error: [{
+              path: 'addfaciliti',
+              message: 'please re-login'
+            }]
+          }
+        }
+      }
+    },
+    deletefaciliti: async(parent, args, {current_user}) => {
+      if(_.isEmpty(args)) {
+        return {
+          status: false,
+          error: [{
+            path: 'deletefaciliti',
+            message: 'fields are required'
+          }]
+        }
+      } else {
+        if(current_user || current_user._id === args.facilitideleteprop.userID) {
+          var faciliti = await db_Merchant.updateOne({'_id': args.facilitideleteprop.merchantID}, {
+            $pull: { 'facilities': {'_id': args.facilitideleteprop.facilitiID} }
+          });
+          if(faciliti.ok === 1) {
+            return {
+              status: true,
+              error: []
+            }
+          }
+        } else {
+          return {
+            status: false,
+            error: [{
+              path: 'deletefaciliti',
+              message: 'please re-login'
+            }]
+          }
+        }
+      }
     }
   }
 }
