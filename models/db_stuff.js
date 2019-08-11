@@ -20,11 +20,11 @@ var StuffSchema = new mongoose.Schema({
   price: {
     type: Number, required: true
   },
-  photos: {
+  photos: [{
     publicId: { type: String },
     secureUrl: { type: String },
     imgType: { type: String }
-  },
+  }],
   discountstatus: {
     type: Boolean, default: false
   }

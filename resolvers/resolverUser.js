@@ -332,7 +332,7 @@ module.exports = {
           var user = await db_User.findOne({'_id': args.userID});
           if(user !== null) {
             if(user.merchant) {
-              user.privilege = 'merchant';
+              user.privilege = args.usertype;
             } else {
               var merchant = new db_Merchant();
               merchant.name = user.username;
