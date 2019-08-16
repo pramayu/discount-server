@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 
-var CategoriSchema = new mongoose.Schema({
+var SubcategoriSchema = new mongoose.Schema({
   child: {
     type: String, required: true, unique: true
   },
-  niche: {
+  categori: {
     type: mongoose.Schema.Types.ObjectId, ref: 'niches'
   }
 });

@@ -2,6 +2,7 @@ module.exports =`
   type Niche {
     _id       : ID!
     child     : String!
+    categori  : [Categori]
   }
 
   type Query {
