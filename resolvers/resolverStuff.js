@@ -1,10 +1,32 @@
 var _ = require('lodash');
 var db_User = require('../models/db_user');
 var db_Merchant = require('../models/db_merchant');
+var db_Stuff = require('../models/db_stuff');
+var db_Categori = require('../models/db_categori');
 
 module.exports = {
   Query: {
 
+  },
+  Stuff: {
+    manager: async(parent, args, {current_user}) => {
+      if(current_user) {
+        var manager = await db_User.findOne({'_id': parent.manager});
+        return manager;
+      }
+    },
+    merchant: async(parent, args, {current_user}) => {
+      if(current_user) {
+        var merchant = await db_Merchant.findOne({'_id': parent.merchant});
+        return merchant;
+      }
+    },
+    categori: async(parent, args, {current_user}) => {
+      if(current_user) {
+        var categori = await db_Categori.find({'_id': {$in: parent.categori}});
+        return categori;
+      }
+    }
   },
   Mutation: {
     usermerchant: async(parent, args, {current_user}) => {
@@ -30,6 +52,58 @@ module.exports = {
       } else {
         return {
           status: false
+        }
+      }
+    },
+    madestuff: async(parent, args, {current_user}) => {
+      if(current_user || current_user._id === args.basestuff.userID) {
+        if(args.basestuff.stuffID) {
+          var stuff = await db_Stuff.findOne({'_id': args.basestuff.stuffID});
+          if(stuff !== null) {
+            if(args.basestuff.upstatus === 'pictureupload') {
+              args.picture.map((res, index) => {
+                stuff.photos.push({
+                  publicId: res.publicId,
+                  secureUrl: res.secureUrl,
+                  imgType: res.imgType,
+                })
+              })
+            } else {
+
+            }
+          } else {
+            return {
+              status: false,
+              error: [{
+                path: 'madestuff',
+                error: 'stuff not found'
+              }]
+            }
+          }
+        } else {
+          console.log(args)
+          var stuff = new db_Stuff();
+          stuff.manager = args.basestuff.userID;
+          stuff.merchant = args.basestuff.merchantID;
+          stuff.title = args.basestuff.title;
+          stuff.description = args.basestuff.description;
+          stuff.price = args.basestuff.price;
+          args.categori.forEach((categori) => {stuff.categori.push(categori.categoriID)})
+        }
+        var savedstuff = await stuff.save();
+        if(savedstuff) {
+          return {
+            status: true,
+            stuff: savedstuff
+          }
+        }
+      } else {
+        return {
+          status: false,
+          error: [{
+            path: 'madestuff',
+            error: 'please re-login'
+          }]
         }
       }
     }

@@ -12,13 +12,13 @@ var StuffSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, ref: 'categories'
   }],
   title: {
-    type: String, required: true
+    type: String
   },
   description: {
     type: String
   },
   price: {
-    type: Number, required: true
+    type: Number
   },
   photos: [{
     publicId: { type: String },
@@ -26,6 +26,9 @@ var StuffSchema = new mongoose.Schema({
     imgType: { type: String }
   }],
   discountstatus: {
+    type: Boolean, default: false
+  },
+  stuffstatus: {
     type: Boolean, default: false
   }
 });

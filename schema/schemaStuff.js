@@ -5,13 +5,14 @@ module.exports = `
     description     : String
     price           : String
     discountstatus  : Boolean
-    thumbnails      : [Thumbnail]
+    photos          : [Photos]
     merchant        : Merchant
     manager         : User
+    categori        : [Categori]
   }
 
-  type Thumbnail {
-    _id             : ID!
+  type Photos {
+    _id             : ID
     secureUrl       : String
     publicId        : String
     imgType         : String
@@ -21,10 +22,32 @@ module.exports = `
     status          : Boolean!
     error           : [Error]
     merchant        : Merchant
+    stuff           : Stuff
+  }
+
+  input basestuff {
+    userID          : ID!
+    merchantID      : ID!
+    stuffID         : ID
+    title           : String
+    description     : String
+    price           : String
+    upstatus        : String
+  }
+
+  input picture {
+    publicId        : String
+    secureUrl       : String
+    imgType         : String
+  }
+
+  input categori {
+    categoriID      : ID
   }
 
   type Mutation {
     usermerchant(userID: ID!): reqResponse!
+    madestuff(basestuff: basestuff, picture: [picture], categori: [categori]): reqResponse!
   }
 
 `
