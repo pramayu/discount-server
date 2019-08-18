@@ -106,6 +106,26 @@ module.exports = {
           }]
         }
       }
+    },
+    stuffpublish: async(parent, args, {current_user}) => {
+      if(current_user || current_user._id === args.userID) {
+        var stuff = await db_Stuff.findOne({'_id': args.stuffID});
+        if(stuff) {
+          stuff.stuffstatus = true;
+          var savedstuff = await stuff.save();
+          return {
+            status: true
+          }
+        } else {
+          return {
+            status: false
+          }
+        }
+      } else {
+        return {
+          status: false
+        }
+      }
     }
   }
 }

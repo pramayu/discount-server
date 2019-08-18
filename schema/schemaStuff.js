@@ -48,6 +48,7 @@ module.exports = `
   type Mutation {
     usermerchant(userID: ID!): reqResponse!
     madestuff(basestuff: basestuff, picture: [picture], categori: [categori]): reqResponse!
+    stuffpublish(userID: ID!, stuffID: ID!): reqResponse!
   }
 
 `
