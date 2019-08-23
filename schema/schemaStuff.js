@@ -5,6 +5,7 @@ module.exports = `
     description     : String
     price           : String
     discountstatus  : Boolean
+    stuffstatus     : Boolean
     photos          : [Photos]
     merchant        : Merchant
     manager         : User
@@ -18,11 +19,16 @@ module.exports = `
     imgType         : String
   }
 
-  type reqResponse {
+  type mtnResponse {
     status          : Boolean!
     error           : [Error]
     merchant        : Merchant
     stuff           : Stuff
+  }
+
+  type queryResponse {
+    status          : Boolean!
+    stuffs          : [Stuff]
   }
 
   input basestuff {
@@ -45,10 +51,14 @@ module.exports = `
     categoriID      : ID
   }
 
+  type Query {
+    getstuffs(userID: ID!): queryResponse!
+  }
+
   type Mutation {
-    usermerchant(userID: ID!): reqResponse!
-    madestuff(basestuff: basestuff, picture: [picture], categori: [categori]): reqResponse!
-    stuffpublish(userID: ID!, stuffID: ID!): reqResponse!
+    usermerchant(userID: ID!): mtnResponse!
+    madestuff(basestuff: basestuff, picture: [picture], categori: [categori]): mtnResponse!
+    stuffpublish(userID: ID!, stuffID: ID!): mtnResponse!
   }
 
 `

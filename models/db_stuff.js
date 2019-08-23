@@ -30,6 +30,9 @@ var StuffSchema = new mongoose.Schema({
   },
   stuffstatus: {
     type: Boolean, default: false
+  },
+  created: {
+    type: Date, default: Date.now()
   }
 });
 

@@ -6,7 +6,36 @@ var db_Categori = require('../models/db_categori');
 
 module.exports = {
   Query: {
-
+    getstuffs: async(parent, args, {current_user}) => {
+      console.log(args)
+      if(current_user || current_user._id === args.userID) {
+        var user = await db_User.findOne({'_id': args.userID});
+        if(user !== null) {
+          var stuffs = await db_Stuff.find({'merchant': user.merchant});
+          if(stuffs !== null) {
+            return {
+              status: true,
+              stuffs
+            }
+          } else {
+            return {
+              status: false,
+              stuffs: []
+            }
+          }
+        } else {
+          return {
+            status: false,
+            stuffs: []
+          }
+        }
+      } else {
+        return {
+          status: false,
+          stuffs: []
+        }
+      }
+    }
   },
   Stuff: {
     manager: async(parent, args, {current_user}) => {
