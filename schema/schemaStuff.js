@@ -29,6 +29,7 @@ module.exports = `
   type queryResponse {
     status          : Boolean!
     stuffs          : [Stuff]
+    stuff           : Stuff
   }
 
   input basestuff {
@@ -53,6 +54,7 @@ module.exports = `
 
   type Query {
     getstuffs(userID: ID!): queryResponse!
+    stuff(stuffID: ID!): queryResponse!
   }
 
   type Mutation {

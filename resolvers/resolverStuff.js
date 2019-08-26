@@ -7,7 +7,6 @@ var db_Categori = require('../models/db_categori');
 module.exports = {
   Query: {
     getstuffs: async(parent, args, {current_user}) => {
-      console.log(args)
       if(current_user || current_user._id === args.userID) {
         var user = await db_User.findOne({'_id': args.userID});
         if(user !== null) {
@@ -33,6 +32,28 @@ module.exports = {
         return {
           status: false,
           stuffs: []
+        }
+      }
+    },
+    stuff: async(parent, args, {current_user}) => {
+      console.log(args)
+      if(current_user || current_user._id) {
+        var stuff = db_Stuff.findOne({'_id': args.stuffID});
+        if(stuff !== null) {
+          return {
+            status: true,
+            stuff
+          }
+        } else {
+          return {
+            status: false,
+            stuff: []
+          }
+        }
+      } else {
+        return {
+          status: false,
+          stuff: []
         }
       }
     }
