@@ -131,7 +131,6 @@ module.exports = {
             }
           }
         } else {
-          console.log(args)
           var stuff = new db_Stuff();
           stuff.manager = args.basestuff.userID;
           stuff.merchant = args.basestuff.merchantID;
