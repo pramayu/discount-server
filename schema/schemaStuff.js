@@ -61,6 +61,7 @@ module.exports = `
     usermerchant(userID: ID!): mtnResponse!
     madestuff(basestuff: basestuff, picture: [picture], categori: [categori]): mtnResponse!
     stuffpublish(userID: ID!, stuffID: ID!): mtnResponse!
+    unsetcategori(userID: ID!, stuffID: ID!, categoriID: ID!): mtnResponse!
   }
 
 `

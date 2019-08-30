@@ -175,6 +175,29 @@ module.exports = {
           status: false
         }
       }
+    },
+    unsetcategori: async(parent, args, {current_user}) => {
+      if(current_user._id === args.userID) {
+        var stuff = await db_Stuff.findOne({'_id': args.stuffID});
+        if(stuff !== null) {
+          var updated = await db_Stuff.updateOne({'_id': args.stuffID}, {$pull: {
+            categori: args.categoriID
+          }});
+          if(updated.ok === 1) {
+            return {
+              status: true
+            }
+          }
+        } else {
+          return {
+            status: false
+          }
+        }
+      } else {
+        return {
+          status: false
+        }
+      }
     }
   }
 }
