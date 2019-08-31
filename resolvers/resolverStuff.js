@@ -1,8 +1,15 @@
 var _ = require('lodash');
+var cloudinary = require('cloudinary');
 var db_User = require('../models/db_user');
 var db_Merchant = require('../models/db_merchant');
 var db_Stuff = require('../models/db_stuff');
 var db_Categori = require('../models/db_categori');
+
+cloudinary.config({
+  cloud_name: 'dw8yfsem4',
+  api_key: '177692719348648',
+  api_secret: '-3ZXwK1ZC9I6_8Tzo6lEZfXgk-o'
+});
 
 module.exports = {
   Query: {
@@ -118,8 +125,8 @@ module.exports = {
                   imgType: res.imgType,
                 })
               })
-            } else {
-
+            } else if(args.basestuff.upstatus === 'allupdate') {
+              console.log(args)
             }
           } else {
             return {
@@ -198,6 +205,9 @@ module.exports = {
           status: false
         }
       }
+    },
+    unusedpicture: async(parent, args, {current_user}) => {
+      
     }
   }
 }

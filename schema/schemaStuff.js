@@ -62,6 +62,7 @@ module.exports = `
     madestuff(basestuff: basestuff, picture: [picture], categori: [categori]): mtnResponse!
     stuffpublish(userID: ID!, stuffID: ID!): mtnResponse!
     unsetcategori(userID: ID!, stuffID: ID!, categoriID: ID!): mtnResponse!
+    unusedpicture(userID: ID!, stuffID: ID!, picture: [picture]): mtnResponse!
   }
 
 `
