@@ -126,7 +126,25 @@ module.exports = {
                 })
               })
             } else if(args.basestuff.upstatus === 'allupdate') {
-              console.log(args)
+              stuff.title = args.basestuff.title !== stuff.title ? args.basestuff.title : stuff.title;
+              stuff.price = args.basestuff.price !== stuff.price ? args.basestuff.price : stuff.price;
+              stuff.description = args.basestuff.description !== stuff.description ? args.basestuff.description : stuff.description;
+              if(args.categori.length > 0) {
+                args.categori.forEach((categori) => {stuff.categori.push(categori.categoriID)})
+              }
+              if(args.picture.length > 0) {
+                args.picture.forEach((picture) => {stuff.photos.push({
+                  publicId: picture.publicId,
+                  secureUrl: picture.secureUrl,
+                  imgType: picture.imgType,
+                })})
+              }
+              var savedstuff = await stuff.save();
+              return {
+                status: true,
+                stuff: savedstuff,
+                error: []
+              }
             }
           } else {
             return {
@@ -207,7 +225,44 @@ module.exports = {
       }
     },
     unusedpicture: async(parent, args, {current_user}) => {
-      
+      if(current_user._id === args.userID) {
+        console.log(args)
+        if(args.picture.length > 0) {
+          if(args.picture[0]._id) {
+            var stuff = await db_Stuff.findOne({'_id': args.stuffID});
+            if(stuff !== null) {
+              var updated = await db_Stuff.updateOne({'_id': args.stuffID}, {$pull: {
+                photos: {'_id': args.picture[0]._id}
+              }});
+              if(updated.ok === 1) {
+                var publicId = args.picture[0].publicId;
+                cloudinary.uploader.destroy(publicId);
+                return {
+                  status: true
+                }
+              }
+            } else {
+              return {
+                status: false
+              }
+            }
+          } else {
+            var publicId = args.picture[0].publicId;
+            cloudinary.uploader.destroy(publicId);
+          }
+          return {
+            status: true
+          }
+        } else {
+          return {
+            status: false
+          }
+        }
+      } else {
+        return {
+          status: false
+        }
+      }
     }
   }
 }
