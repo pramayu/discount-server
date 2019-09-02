@@ -185,7 +185,7 @@ module.exports = {
       if(current_user || current_user._id === args.userID) {
         var stuff = await db_Stuff.findOne({'_id': args.stuffID});
         if(stuff) {
-          stuff.stuffstatus = true;
+          stuff.stuffstatus = !stuff.stuffstatus;
           var savedstuff = await stuff.save();
           return {
             status: true
