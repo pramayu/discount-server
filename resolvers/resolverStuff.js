@@ -4,6 +4,7 @@ var db_User = require('../models/db_user');
 var db_Merchant = require('../models/db_merchant');
 var db_Stuff = require('../models/db_stuff');
 var db_Categori = require('../models/db_categori');
+var db_Discount = require('../models/db_discount');
 
 cloudinary.config({
   cloud_name: 'dw8yfsem4',
@@ -82,6 +83,12 @@ module.exports = {
       if(current_user) {
         var categori = await db_Categori.find({'_id': {$in: parent.categori}});
         return categori;
+      }
+    },
+    discounts: async(parent, args, {current_user}) => {
+      if(current_user || current_user._id) {
+        var discounts = await db_Discount.find({'stuff': parent._id});
+        return discounts;
       }
     }
   },

@@ -20,7 +20,7 @@ var DiscountSchema = new mongoose.Schema({
   status: {
     type: Boolean, default: false
   },
-  limitpeople: {
+  quantity: {
     type: String
   }
 });
