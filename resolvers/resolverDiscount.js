@@ -10,8 +10,9 @@ module.exports = {
   },
   Discount: {
     discountype: async(parent, args, {current_user}) => {
-      if(current_user || current_user._id) {
-        var discountype = await db_Discountype.find({'_id': parent.discountype})
+      if(current_user) {
+        var discountype = await db_Discountype.findOne({'_id': parent.discountype});
+        return discountype;
       }
     }
   },
@@ -53,6 +54,38 @@ module.exports = {
           status: false,
           error: [{
             path: 'madediskon',
+            message: 'please re-login'
+          }]
+        }
+      }
+    },
+    terminatediscount: async(parent, args, {current_user}) => {
+      if(current_user._id === args.userID) {
+        var stuff = await db_Stuff.findOne({'_id': args.stuffID});
+        if(stuff !== null) {
+          var discount = await db_Discount.updateOne({'_id': args.discountID}, {$set: {status: false}});
+          stuff.discountstatus = false;
+          var stuffupdated = await stuff.save();
+          if(stuffupdated) {
+            return {
+              status: true,
+              error: []
+            }
+          }
+        } else {
+          return {
+            status: false,
+            error: [{
+              path: 'terminatediscount',
+              message: 'stuff not found'
+            }]
+          }
+        }
+      } else {
+        return {
+          status: false,
+          error: [{
+            path: 'terminatediscount',
             message: 'please re-login'
           }]
         }

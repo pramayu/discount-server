@@ -33,5 +33,6 @@ module.exports=`
 
   type Mutation {
     madediskon(reqdiscount: reqdiscount): responseMutation!
+    terminatediscount(userID: ID!, stuffID: ID!, discountID: ID!): responseMutation!
   }
 `

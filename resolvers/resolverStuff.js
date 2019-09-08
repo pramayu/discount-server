@@ -86,7 +86,7 @@ module.exports = {
       }
     },
     discounts: async(parent, args, {current_user}) => {
-      if(current_user || current_user._id) {
+      if(current_user) {
         var discounts = await db_Discount.find({'stuff': parent._id});
         return discounts;
       }
