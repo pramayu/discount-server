@@ -4,7 +4,12 @@ var db_Categori = require('../models/db_categori');
 
 module.exports = {
   Query: {
-
+    niches: async(parent, args, {current_user}) => {
+      if(current_user) {
+        var niches = await db_Niche.find({});
+        return niches;
+      }
+    }
   },
   Niche: {
     categori: async(parent, args, {current_user}) => {
