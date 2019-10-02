@@ -8,10 +8,6 @@ var MerchantSchema = new mongoose.Schema({
     type: String
   },
   location: [{
-    coordinate: [{
-      latitude: { type: String },
-      longitude: { type: String }
-    }],
     address: {
       type: String
     },
@@ -22,6 +18,12 @@ var MerchantSchema = new mongoose.Schema({
       type: String
     },
   }],
+  geometri: {
+    type: {
+      type: String, default: "MultiPoint"
+    },
+    coordinates: [ [Number] ]
+  },
   description: {
     type: String
   },

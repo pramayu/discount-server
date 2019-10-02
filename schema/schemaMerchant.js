@@ -24,7 +24,6 @@ module.exports =`
     address     : String
     province    : String
     distric     : String
-    coordinate  : [Coordinate]
   }
 
   type Photo {
@@ -83,6 +82,7 @@ module.exports =`
     userID      : ID!
     merchantID  : ID!
     locationID  : ID!
+    indexID     : String
   }
 
   input categoriprop {
