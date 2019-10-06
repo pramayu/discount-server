@@ -7,23 +7,6 @@ var MerchantSchema = new mongoose.Schema({
   phone: {
     type: String
   },
-  location: [{
-    address: {
-      type: String
-    },
-    distric: {
-      type: String
-    },
-    province: {
-      type: String
-    },
-  }],
-  geometri: {
-    type: {
-      type: String, default: "MultiPoint"
-    },
-    coordinates: [ [Number] ]
-  },
   description: {
     type: String
   },

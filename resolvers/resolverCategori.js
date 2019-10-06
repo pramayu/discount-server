@@ -6,7 +6,6 @@ module.exports = {
       if(current_user || current_user._id) {
         var categori = await db_Categori.find();
         return categori;
-        console.log(categori)
       }
     }
   }

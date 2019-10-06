@@ -13,19 +13,6 @@ module.exports =`
     facilities  : [Facilities]
   }
 
-  type Coordinate {
-    _id         : ID
-    latitude    : String
-    longitude   : String
-  }
-
-  type Location {
-    _id         : ID
-    address     : String
-    province    : String
-    distric     : String
-  }
-
   type Photo {
     _id         : ID
     publicId    : String
@@ -46,7 +33,7 @@ module.exports =`
   type merchantRespon {
     status      : Boolean!
     error       : [Error!]
-    location    : [Location]
+    location    : Location
     rules       : [Rules]
     facilities  : [Facilities]
   }

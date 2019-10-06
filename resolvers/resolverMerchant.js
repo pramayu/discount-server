@@ -2,6 +2,7 @@ var _ = require('lodash');
 var cloudinary = require('cloudinary');
 var db_Merchant = require('../models/db_merchant');
 var db_Niche = require('../models/db_niche');
+var db_Location = require('../models/db_location');
 
 cloudinary.config({
   cloud_name: 'dw8yfsem4',
@@ -15,6 +16,12 @@ module.exports = {
       if(current_user || current_user._id) {
         var niche = await db_Niche.findOne({'_id': parent.niche});
         return niche
+      }
+    },
+    location: async(parent, args, {current_user}) => {
+      if(current_user || current_user._id) {
+        var location = await db_Location.find({'merchant': parent._id});
+        return location;
       }
     }
   },
@@ -65,67 +72,21 @@ module.exports = {
       }
     },
     addressupdatemerchant: async(parent, args, { current_user }) => {
-      if(current_user || current_user._id === args.addressupdateprop.userID) {
-        var merchant = await db_Merchant.findOne({'_id': args.addressupdateprop.merchantID});
-        if(merchant !== null) {
-          if(args.addressupdateprop.locationID) {
-            var indexID = parseInt(args.addressupdateprop.indexID);
-            var qrSet1 = 'location.'+indexID+'.address';
-            var qrSet2 = 'location.'+indexID+'.distric';
-            var qrSet3 = 'location.'+indexID+'.province';
-            // var qrSet4 = 'location.'+indexID+'.coordinate.0.latitude';
-            // var qrSet5 = 'location.'+indexID+'.coordinate.0.longitude';
-            var updatemerchant = await db_Merchant.updateOne({
-              '_id': args.addressupdateprop.merchantID, 'location': {$elemMatch: {'_id': args.addressupdateprop.locationID}}
-            }, {$set: {
-              [`${qrSet1}`]: merchant.location[indexID].address !== args.addressupdateprop.address ? args.addressupdateprop.address : merchant.location[indexID].address,
-              [`${qrSet2}`]: merchant.location[indexID].distric !== args.addressupdateprop.distric ? args.addressupdateprop.distric : merchant.location[indexID].distric,
-              [`${qrSet3}`]: merchant.location[indexID].province !== args.addressupdateprop.province ? args.addressupdateprop.province : merchant.location[indexID].province,
-              // [`${qrSet4}`]: merchant.location[indexID].coordinate[0].latitude !== args.addressupdateprop.latitude ? args.addressupdateprop.latitude : merchant.location[indexID].coordinate[0].latitude,
-              // [`${qrSet5}`]: merchant.location[indexID].coordinate[0].longitude !== args.addressupdateprop.longitude ? args.addressupdateprop.longitude : merchant.location[indexID].coordinate[0].longitude,
-            }});
-            if(updatemerchant.ok === 1) {
-              var savelocation = await db_Merchant.findOne({
-                '_id': args.addressupdateprop.merchantID
-              });
-              console.log(savelocation)
-              return {
-                status: true,
-                error: [],
-                location: savelocation.location
-              }
-            }
-          } else {
-            var coordinates = [parseFloat(args.addressupdateprop.latitude), parseFloat(args.addressupdateprop.longitude)];
-            // coordinate.push({
-            //   ,
-            //   longitude: args.addressupdateprop.longitude
-            // });
-            merchant.location.push({
-              address: args.addressupdateprop.address,
-              distric: args.addressupdateprop.distric,
-              province: args.addressupdateprop.province,
-            });
-            merchant.geometri.coordinates.push(coordinates)
-            var savemerchant = await merchant.save();
-            if(savemerchant) {
-              var newlocation = _.filter(savemerchant.location, (loc) => {
-                return loc.address === args.addressupdateprop.address
-              });
-              return {
-                status: true,
-                error: [],
-                location: newlocation
-              }
-            }
-          }
-        } else {
+      if(current_user._id === args.addressupdateprop.userID) {
+        var coordinates = [parseFloat(args.addressupdateprop.longitude), parseFloat(args.addressupdateprop.latitude)];
+        var location = new db_Location({});
+        location.address                = args.addressupdateprop.address;
+        location.distric                = args.addressupdateprop.distric;
+        location.province               = args.addressupdateprop.province;
+        location.merchant               = args.addressupdateprop.merchantID;
+        location.location.type          = "Point";
+        location.location.coordinates   = coordinates;
+        var savelocation = await location.save();
+        if(savelocation) {
           return {
-            status: false,
-            error: [{
-              path: 'addressupdatemerchant',
-              message: 'merchant not found'
-            }]
+            status: true,
+            location: savelocation,
+            error: []
           }
         }
       } else {
@@ -149,21 +110,10 @@ module.exports = {
         }
       } else {
         if(current_user || current_user._id === args.addressdeleteprop.userID) {
-          var pathUnset = "geometri.coordinates."+args.addressdeleteprop.indexID;
-          var deleteaddress = await db_Merchant.updateOne({'_id': args.addressdeleteprop.merchantID}, {
-            $pull: { 'location': {'_id': args.addressdeleteprop.locationID} }
-          });
-          await db_Merchant.updateOne({'_id': args.addressdeleteprop.merchantID}, {
-            $unset: {[`${pathUnset}`]: 1}
-          });
-          await db_Merchant.updateOne({'_id': args.addressdeleteprop.merchantID}, {
-            $pull: {"geometri.coordinates": null}
-          });
-          if(deleteaddress.ok === 1) {
-            return {
-              status: true,
-              error: []
-            }
+          await db_Location.findByIdAndRemove({'_id': args.addressdeleteprop.locationID})
+          return {
+            status: true,
+            error: []
           }
         } else {
           return {
