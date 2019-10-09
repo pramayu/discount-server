@@ -11,6 +11,7 @@ module.exports =`
     niche       : Niche
     rules       : [Rules]
     facilities  : [Facilities]
+    stuffs      : [Stuff]
   }
 
   type Photo {

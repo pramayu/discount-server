@@ -3,6 +3,7 @@ var cloudinary = require('cloudinary');
 var db_Merchant = require('../models/db_merchant');
 var db_Niche = require('../models/db_niche');
 var db_Location = require('../models/db_location');
+var db_Stuff = require('../models/db_stuff');
 
 cloudinary.config({
   cloud_name: 'dw8yfsem4',
@@ -23,6 +24,12 @@ module.exports = {
         var location = await db_Location.find({'merchant': parent._id});
         return location;
       }
+    },
+    stuffs: async(parent, args, {current_user}) => {
+      var stuffs = await db_Stuff.find({
+        $and: [{'merchant': parent._id}, {'stuffstatus': true}]
+      });
+      return stuffs
     }
   },
   Mutation: {
