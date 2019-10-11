@@ -1,5 +1,5 @@
 module.exports =`
-  type resQueries {
+  type TimelineSchema {
     status        : Boolean!
     merchant      : [Merchant]
     stuffs        : [Stuff]
@@ -12,6 +12,6 @@ module.exports =`
   }
 
   type Query {
-    timeline(timelineProp: timelineProp): resQueries!
+    timeline(timelineProp: timelineProp): TimelineSchema!
   }
 `
