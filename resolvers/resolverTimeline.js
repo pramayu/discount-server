@@ -1,9 +1,20 @@
 var _ = require('lodash');
 var db_Merchant = require('../models/db_merchant');
 var db_Location = require('../models/db_location');
+var db_User = require('../models/db_user');
 
 module.exports = {
   Query: {
+    usertimeline: async(parent, args, {current_user}) => {
+      if(current_user._id === args.userID) {
+        var user = await db_User.findOne({'_id': args.userID});
+        if(user !== null) {
+          return user
+        } else {
+          console.log('error wooe')
+        }
+      }
+    },
     timeline: async(parent, args, {current_user}) => {
       if(current_user || current_user._id === args.timelineProp.userID) {
         var timeline = await db_Location.aggregate([

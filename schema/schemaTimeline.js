@@ -13,5 +13,6 @@ module.exports =`
 
   type Query {
     timeline(timelineProp: timelineProp): TimelineSchema!
+    usertimeline(userID: ID!): User
   }
 `
