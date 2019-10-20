@@ -63,6 +63,7 @@ module.exports = {
           var merchant = [];
           var stuffs = [];
           _.map(timeline, (tmline) => {
+            console.log(tmline)
             merchant.push(...tmline.merchant);
             stuffs.push(...tmline.stuffs)
           });
