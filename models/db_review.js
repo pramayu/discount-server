@@ -10,6 +10,9 @@ var ReviewSchema = new mongoose.Schema({
   },
   stuff: {
     type: mongoose.Schema.Types.ObjectId, ref: 'stuffs'
+  },
+  createAt: {
+    type: Date, default: Date.now()
   }
 });
 
