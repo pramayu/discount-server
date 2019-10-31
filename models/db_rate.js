@@ -10,6 +10,9 @@ var RateSchema = new mongoose.Schema({
   },
   scale: {
     type: Number, required: true
+  },
+  comment: {
+    type: mongoose.Schema.Types.ObjectId, ref: 'comments'
   }
 });
 
