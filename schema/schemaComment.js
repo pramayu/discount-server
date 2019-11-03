@@ -1,11 +1,12 @@
 module.exports = `
   type Comment {
-    _id       : ID!
-    child     : String!
-    createAt  : String
-    user      : User
-    stuff     : Stuff
-    rate      : RateStore
+    _id         : ID!
+    child       : String!
+    createAt    : String
+    user        : User
+    stuff       : Stuff
+    rate        : RateStore
+    subcomment  : [SubComment]
   }
 
   input commentprop {
@@ -18,9 +19,9 @@ module.exports = `
   }
 
   type commentResponse {
-    status    : Boolean!
-    error     : [Error]
-    comment   : Comment
+    status      : Boolean!
+    error       : [Error]
+    comment     : Comment
   }
 
   type Query {

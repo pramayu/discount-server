@@ -3,6 +3,7 @@ var db_Comment = require('../models/db_comment');
 var db_Stuff = require('../models/db_stuff');
 var db_User = require('../models/db_user');
 var db_Rate = require('../models/db_rate');
+var db_Subcomment = require('../models/db_subcomment');
 
 module.exports = {
   Query: {
@@ -54,6 +55,18 @@ module.exports = {
         var rate = await db_Rate.findOne({'comment': parent._id});
         if(rate !== null) {
           return rate;
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    },
+    subcomment: async(parent, args, {current_user}) => {
+      if(current_user._id) {
+        var subcomments = await db_Subcomment.find({'comment': parent._id});
+        if(subcomments !== null) {
+          return subcomments;
         } else {
           return null;
         }
@@ -157,8 +170,8 @@ module.exports = {
       if(current_user._id === args.commentprop.userID) {
         var comment = await db_Comment.findOne({'_id': args.commentprop.commentID});
         if(comment !== null) {
-          await db_Comment.remove({'_id': args.commentprop.commentID});
-          await db_Rate.remove({'comment': args.commentprop.commentID});
+          await db_Comment.deleteOne({'_id': args.commentprop.commentID});
+          await db_Rate.deleteOne({'comment': args.commentprop.commentID});
           return {
             status: true
           }
