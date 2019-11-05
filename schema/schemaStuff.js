@@ -10,7 +10,8 @@ module.exports = `
     merchant        : Merchant
     manager         : User
     categori        : [Categori]
-    discounts       : [Discount]        
+    discounts       : [Discount]
+    vote            : [Vote]
   }
 
   type Photos {

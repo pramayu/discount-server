@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 
 var VoteSchema = new mongoose.Schema({
-  user: {
+  voter: {
     type: mongoose.Schema.Types.ObjectId, ref: 'users'
   },
   stuff: {

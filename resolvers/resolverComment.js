@@ -84,6 +84,7 @@ module.exports = {
             var comment = new db_Comment({});
             comment.child = args.commentprop.child;
             comment.user = args.commentprop.userID;
+            comment.merchant = args.commentprop.merchantID;
             comment.stuff = stuff._id
             var savecomment = await comment.save();
             if(savecomment) {
